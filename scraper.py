@@ -23,7 +23,8 @@ def scrape_mps():
                     party = party_list[0]
                     party_id = party_list[1].split(')',1)[0]
                 else:
-                    group = ""                                
+                    party = ""  
+                    party_id = ""                                  
                 find_district = tree.xpath('//td[div="Electoral District / National List"]/text()') 
                 if find_district:
                     area = find_district[0].strip()
