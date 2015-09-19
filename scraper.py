@@ -44,7 +44,10 @@ def scrape_mps():
                     birth_date = find_birth_date[0].strip()
                     birth_date = re.search(r'\d{1,2}-\d{1,2}-\d{2,4}', birth_date).group()
                     birth_date = time.strptime(birth_date,'%d-%m-%Y')
-                    birth_date = time.strftime('%Y-%m-%d',birth_date)
+                    try:
+                        birth_date = time.strftime('%Y-%m-%d',birth_date)
+                    except:
+                        birth_date = ""
                 else:
                     birth_date = ""
     
