@@ -13,6 +13,7 @@ def do_the_scraping():
         for item in data:
             url = "http://www.parliament.lk/en/members-of-parliament/directory-of-members/viewMember/" + str(item['mem_intranet_id'])
             scrape_mp(url)
+            time.sleep(0.5)
 
 def scrape_mp(url):
     page = requests.get(url)
