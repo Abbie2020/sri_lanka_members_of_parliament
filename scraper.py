@@ -17,63 +17,61 @@ def do_the_scraping():
 
 def scrape_mp(url):
     page = requests.get(url)
-    if page.status_code == 200:
-        tree = html.fromstring(page.text)
-        mp_name = tree.xpath('//div[@class="components-wrapper"]/h2/text()') 
-        id = url.rsplit('/',1)[1]
-        if mp_name:
-            name = mp_name[0].split(',',1)[0]
-            find_party = tree.xpath('//td[div="Party"]/a[1]/text()')
-            if find_party:
-                party_list = find_party[0].split('(',1)
-                party = party_list[0]
-                party_id = party_list[1].split(')',1)[0]
-            else:
-                party = ""  
-                party_id = ""                              
-            find_district = tree.xpath('//td[div="Electoral District / National List"]/text()') 
-            if find_district:
-                area = find_district[0].strip()
-            else:
-                area = ""
-            find_email = tree.xpath('//a[@onclick="getContactUs();"]/text()') 
-            if find_email:
-                email = find_email[0]
-            else:
-                email = ""
-            find_image = tree.xpath('//div[@class="left-pic"]/img/@src') 
-            if find_image:
-                image = find_image[0]
-            else:
-                image = ""
-            find_birth_date = tree.xpath('//td[span="Date of Birth"]/text()') 
-            if find_birth_date:
-                birth_date = find_birth_date[0].strip()
-                birth_date = re.search(r'\d{1,2}-\d{1,2}-\d{2,4}', birth_date).group()
-                birth_date = time.strptime(birth_date,'%d-%m-%Y')
-                try:
-                    birth_date = time.strftime('%Y-%m-%d',birth_date)
-                except:
-                    birth_date = ""
-            else:
-                birth_date = ""
+    tree = html.fromstring(page.text)
+    id = url.rsplit('/',1)[1]
+    find_mp_name = tree.xpath('//div[@class="components-wrapper"]/h2/text()') 
+    if find_mp_name:
+        name = mp_name[0].split(',',1)[0]
+    else:
+        name = ""
+    find_party = tree.xpath('//td[div="Party"]/a[1]/text()')
+    if find_party:
+        party_list = find_party[0].split('(',1)
+        party = party_list[0]
+        party_id = party_list[1].split(')',1)[0]
+    else:
+        party = ""  
+        party_id = ""                              
+    find_district = tree.xpath('//td[div="Electoral District / National List"]/text()') 
+    if find_district:
+        area = find_district[0].strip()
+    else:
+        area = ""
+    find_email = tree.xpath('//a[@onclick="getContactUs();"]/text()') 
+    if find_email:
+        email = find_email[0]
+    else:
+        email = ""
+    find_image = tree.xpath('//div[@class="left-pic"]/img/@src') 
+    if find_image:
+        image = find_image[0]
+    else:
+        image = ""
+    find_birth_date = tree.xpath('//td[span="Date of Birth"]/text()') 
+    if find_birth_date:
+        birth_date = find_birth_date[0].strip()
+        birth_date = re.search(r'\d{1,2}-\d{1,2}-\d{2,4}', birth_date).group()
+        birth_date = time.strptime(birth_date,'%d-%m-%Y')
+        try:
+            birth_date = time.strftime('%Y-%m-%d',birth_date)
+        except:
+            birth_date = ""
+    else:
+        birth_date = ""
 
-            data = {
-                'id': id,
-                'name': name,
-                'area': area,
-                'party': party,
-                'party_id': party_id,
-                'email': email,
-                'image': image,
-                'birth_date': birth_date,
-                'term': '15',
-                'source': url,
-                }
-            print data
-            scraperwiki.sqlite.save(unique_keys = ['id'], data = data)
-            
-        else:
-            pass
+    data = {
+        'id': id,
+        'name': name,
+        'area': area,
+        'party': party,
+        'party_id': party_id,
+        'email': email,
+        'image': image,
+        'birth_date': birth_date,
+        'term': '15',
+        'source': url,
+        }
+    print data
+    scraperwiki.sqlite.save(unique_keys = ['id'], data = data)
         
 do_the_scraping()
