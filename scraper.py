@@ -21,7 +21,7 @@ def scrape_mp(url):
     id = url.rsplit('/',1)[1]
     find_mp_name = tree.xpath('//div[@class="components-wrapper"]/h2/text()') 
     if find_mp_name:
-        name = mp_name[0].split(',',1)[0]
+        name = find_mp_name[0].split(',',1)[0]
     else:
         name = ""
     find_party = tree.xpath('//td[div="Party"]/a[1]/text()')
